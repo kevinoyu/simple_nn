@@ -2,15 +2,7 @@ from __future__ import annotations
 import math
 from typing import Union, Callable
 import graphviz
-
-_IOTA: int = 0
-
-
-def iota() -> str:
-    global _IOTA
-    _IOTA += 1
-    return str(_IOTA)
-
+from iota import iota
 
 class GradVal:
     def __init__(self, val: float, ancestors: tuple = (), op: str = "") -> None:
@@ -77,7 +69,7 @@ class GradVal:
         new_param: GradVal = GradVal(
             val=math.exp(self.val),
             ancestors=(self,),
-            op="e^",
+            op="exp",
         )
 
         def _back_closure():
@@ -104,10 +96,10 @@ class GradVal:
     def relu(self) -> GradVal:
         new_param: GradVal = GradVal(val=max(0, self.val), ancestors=(self,), op="relu")
 
-        def __back_closure():
+        def _back_closure():
             self.gradient = 0 if self.val <= 0 else new_param.gradient
 
-        new_param._back = __back_closure
+        new_param._back = _back_closure
 
         return new_param
 
