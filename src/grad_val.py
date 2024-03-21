@@ -57,7 +57,7 @@ class GradVal:
         return self * other
 
     def __truediv__(self, other: Union[int, float, GradVal]) -> GradVal:
-        return self * other**-1
+        return self * other**-1.0
 
     def __neg__(self) -> GradVal:
         return self * -1
