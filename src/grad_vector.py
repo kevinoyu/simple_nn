@@ -28,14 +28,18 @@ class GradVector:
         new_tensor = GradVector(self.val + other.val, (self, other), op="+")
 
         if other.shape == self.shape:
+
             def _back_closure():
                 other.gradient += new_tensor.gradient
                 self.gradient += new_tensor.gradient
+
             new_tensor._back = _back_closure
         elif len(self.shape) != len(other.shape) and self.shape[1:] == other.shape:
+
             def _back_closure():
                 self.gradient += new_tensor.gradient
                 other.gradient += np.sum(new_tensor.gradient, axis=0)
+
             new_tensor._back = _back_closure
         else:
             return None
@@ -101,7 +105,7 @@ class GradVector:
         new_tensor = GradVector(np.clip(self.val, 0, None), (self,), op="relu")
 
         def _back_closure():
-            self.gradient = np.where(self.val > 0, new_tensor.gradient, 0)
+            self.gradient += np.where(self.val > 0, new_tensor.gradient, 0)
 
         new_tensor._back = _back_closure
         return new_tensor
@@ -110,7 +114,7 @@ class GradVector:
         new_tensor = GradVector(vals=self.val.T, ancestors=(self,), op="T")
 
         def _back_closure():
-            self.gradient = new_tensor.gradient.T
+            self.gradient += new_tensor.gradient.T
 
         new_tensor._back = _back_closure
 
@@ -143,6 +147,9 @@ class GradVector:
             vertex.gradient = np.zeros(vertex.shape)
             for ancestor in vertex.ancestors:
                 search(ancestor)
+
+    def __repr__(self) -> str:
+        return f"{self.val}"
 
     def visualize(self) -> graphviz.Digraph:
         dot = graphviz.Digraph()

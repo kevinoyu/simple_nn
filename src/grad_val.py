@@ -4,6 +4,7 @@ from typing import Union, Callable
 import graphviz
 from iota import iota
 
+
 class GradVal:
     def __init__(self, val: float, ancestors: tuple = (), op: str = "") -> None:
         self.val: float = val

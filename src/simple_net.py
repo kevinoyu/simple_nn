@@ -7,14 +7,14 @@ import numpy as np
 
 class Layer(ABC):
     @abstractmethod
-    def forward(self, x: np.ndarray[GradVal]) -> np.ndarray[GradVal]:
+    def forward(self, x: Iterable) -> Iterable:
         pass
 
     @abstractmethod
-    def parameters(self) -> np.ndarray[GradVal]:
+    def parameters(self) -> Iterable:
         pass
 
-    def __call__(self, x: np.ndarray[GradVal]) -> np.ndarray[GradVal]:
+    def __call__(self, x: Iterable) -> Iterable:
         return self.forward(x)
 
 
@@ -23,7 +23,10 @@ class SimpleLinearLayer(Layer):
         self.shape = (n_input, n_output)
 
         self.weights: np.ndarray = np.array(
-            [[GradVal(x) for x in np.random.uniform(-1, 1, n_input)] for _ in range(n_output)]
+            [
+                [GradVal(x) for x in np.random.uniform(-1, 1, n_input)]
+                for _ in range(n_output)
+            ]
             if n_output > 1
             else [GradVal(x) for x in np.random.uniform(-1, 1, n_input)]
         )
@@ -34,7 +37,7 @@ class SimpleLinearLayer(Layer):
         return x @ self.weights.T + self.bias
 
     def parameters(self) -> np.ndarray[GradVal]:
-        return self.weights.flatten()
+        return np.ndarray([self.weights.flatten(), self.bias.flatten()])
 
 
 class SimpleReluLayer(Layer):

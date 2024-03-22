@@ -20,7 +20,9 @@ class VectorLayer(ABC):
 class VectorLinearLayer(VectorLayer):
     def __init__(self, n_input: int, n_output: int) -> None:
         self.shape = (n_input, n_output)
-        self.weights: GradVector = GradVector(np.random.uniform(-1, 1, (n_input, n_output)))
+        self.weights: GradVector = GradVector(
+            np.random.uniform(-1, 1, (n_input, n_output))
+        )
         self.bias: GradVector = GradVector(np.random.uniform(-1, 1, n_output))
 
     def forward(self, x: GradVector) -> GradVector:
@@ -29,11 +31,10 @@ class VectorLinearLayer(VectorLayer):
     def parameters(self) -> np.ndarray[GradVector]:
         return np.array([self.weights, self.bias])
 
+
 class VectorReluLayer(VectorLayer):
     def forward(self, x: GradVector) -> GradVector:
         return x.relu()
-    
+
     def parameters(self) -> np.ndarray[GradVector]:
         return np.array([])
-
-
