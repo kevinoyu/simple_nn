@@ -1,23 +1,9 @@
 from __future__ import annotations
-from grad_vector import GradVector
+from gradient.grad_vector import GradVector
 import numpy as np
-from abc import ABC, abstractmethod
+from nn.model import Layer
 
-
-class VectorLayer(ABC):
-    @abstractmethod
-    def forward(self, x: GradVector) -> GradVector:
-        pass
-
-    @abstractmethod
-    def parameters(self) -> np.ndarray[GradVector]:
-        pass
-
-    def __call__(self, x: GradVector) -> GradVector:
-        return self.forward(x)
-
-
-class VectorLinearLayer(VectorLayer):
+class VectorLinearLayer(Layer):
     def __init__(self, n_input: int, n_output: int) -> None:
         self.shape = (n_input, n_output)
         self.weights: GradVector = GradVector(
@@ -32,7 +18,7 @@ class VectorLinearLayer(VectorLayer):
         return np.array([self.weights, self.bias])
 
 
-class VectorReluLayer(VectorLayer):
+class VectorReluLayer(Layer):
     def forward(self, x: GradVector) -> GradVector:
         return x.relu()
 

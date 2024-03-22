@@ -2,7 +2,7 @@ from __future__ import annotations
 import math
 from typing import Union, Callable
 import graphviz
-from iota import iota
+from util.iota import iota
 
 
 class GradVal:

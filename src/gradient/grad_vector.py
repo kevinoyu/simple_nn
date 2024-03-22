@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Callable, Iterable, Union
 import graphviz
 import numpy as np
-from iota import iota
+from util.iota import iota
 from random import random
 
 

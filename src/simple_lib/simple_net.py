@@ -1,21 +1,6 @@
-from abc import ABC, abstractmethod
-from typing import Iterable
-from grad_val import GradVal
-from random import random
+from simple_lib.grad_val import GradVal
 import numpy as np
-
-
-class Layer(ABC):
-    @abstractmethod
-    def forward(self, x: Iterable) -> Iterable:
-        pass
-
-    @abstractmethod
-    def parameters(self) -> Iterable:
-        pass
-
-    def __call__(self, x: Iterable) -> Iterable:
-        return self.forward(x)
+from model import Layer
 
 
 class SimpleLinearLayer(Layer):
@@ -49,19 +34,3 @@ class SimpleReluLayer(Layer):
 
     def parameters(self) -> list[GradVal]:
         return []
-
-
-class Model(Layer):
-    def __init__(self, pipeline: Iterable[Layer]):
-        self.pipeline: Iterable[Layer] = pipeline
-
-    def forward(self, x: np.ndarray[GradVal]) -> np.ndarray[GradVal]:
-        for layer in self.pipeline:
-            x = layer.forward(x)
-        return x
-
-    def parameters(self) -> np.ndarray[GradVal]:
-        params = np.array([])
-        for layer in self.pipeline:
-            params = np.append(params, layer.parameters())
-        return params

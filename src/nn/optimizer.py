@@ -1,10 +1,9 @@
-import numpy as np
-from grad_val import GradVal
+from collections.abc import Iterable
 
 
 class GDOptimizer:
-    def __init__(self, params: np.ndarray, lr=1e-3) -> None:
-        self.params: np.ndarray = params
+    def __init__(self, params: Iterable, lr=1e-3) -> None:
+        self.params: Iterable = params
         self.lr = lr
 
     def optimize(self) -> None:
